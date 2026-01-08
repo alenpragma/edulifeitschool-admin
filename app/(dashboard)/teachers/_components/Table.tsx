@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import DeleteTeacherModal from "./DeleteModal";
 import UpdateTeacherModal from "./UpdateModal";
 import { Teacher } from "@/types/teacher";
+import Image from "next/image";
 
 type Props = {
   isFetching: boolean;
@@ -118,10 +119,13 @@ export default function TeacherTable({
 
                   <td className="px-4 py-3">
                     {teacher.profilePicture ? (
-                      <img
+                      <Image
                         src={teacher.profilePicture}
                         alt={teacher.name}
                         className="h-10 w-10 object-cover rounded-full"
+                        width={60}
+                        height={60}
+                        unoptimized
                       />
                     ) : (
                       <span className="text-gray-500">N/A</span>
