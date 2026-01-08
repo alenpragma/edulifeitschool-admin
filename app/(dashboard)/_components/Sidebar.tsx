@@ -11,6 +11,7 @@ import {
   Image as IconImage,
   Users,
   CirclePlay,
+  Mail,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -28,6 +29,7 @@ type NavigationItem = {
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/", icon: <LayoutDashboard size={20} /> },
+  { name: "Contact Form", href: "/contact-form", icon: <Mail size={20} /> },
   { name: "Events", href: "/events", icon: <CirclePlay size={20} /> },
   { name: "Teachers", href: "/teachers", icon: <Users size={20} /> },
   { name: "Photo Gallery", href: "/gallery", icon: <IconImage size={20} /> },
