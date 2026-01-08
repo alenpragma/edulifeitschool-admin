@@ -152,22 +152,7 @@ export default function HeroSectionForm({ hero }: { hero: Hero | null }) {
         />
 
         {/* Hero Image */}
-        <div className="flex flex-col">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Hero Image
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
-          />
-          {watchedFile && (
-            <p className="text-sm mt-1 text-gray-500">
-              Selected file: {(watchedFile as File).name}
-            </p>
-          )}
-        </div>
+        <Input type="file" accept="image/*" onChange={handleFileChange} />
 
         {/* Actions */}
         <div className="col-span-2 flex justify-end gap-4 mt-4">
