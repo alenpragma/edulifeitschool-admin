@@ -8,6 +8,7 @@ import SocialSectionForm from "./_components/SocialSectionForm";
 import ContactSectionForm from "./_components/ContactSectionForm";
 import CampusSectionForm from "./_components/CampusSectionForm";
 import OpeningHoursSectionForm from "./_components/OpeningHoursForm";
+import TestimonialSectionForm from "./_components/TestimonialSectionForm";
 
 export default function SiteSettingsPage() {
   const { data: settings } = useQuery<SiteSettings>({
@@ -39,6 +40,8 @@ export default function SiteSettingsPage() {
         <OpeningHoursSectionForm
           openingHours={settings?.openingHours || null}
         />
+
+        <TestimonialSectionForm testimonials={settings?.testimonials || null} />
       </div>
     </div>
   );

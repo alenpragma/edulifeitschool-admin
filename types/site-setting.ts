@@ -35,10 +35,18 @@ export type OpeningHours = {
   sunday: string;
 };
 
+export type TestimonialItem = {
+  name: string;
+  title: string;
+  subtitle?: string;
+  value: string;
+};
+
 export type SiteSettings = {
   hero: Hero;
   social: Social;
   contact: ContactItem[];
   campuses: Campus[];
   openingHours: OpeningHours;
+  testimonials: TestimonialItem[];
 };
