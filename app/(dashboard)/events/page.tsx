@@ -8,16 +8,32 @@ import { Event } from "@/types/event";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import Table from "./_components/Table";
+import Pagination from "@/components/ui/Pagination";
+
+export type Meta = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
+
+export type EventApiResponse = {
+  success: boolean;
+  message: string;
+  data: Event[];
+  meta: Meta;
+};
 
 export default function Events() {
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
 
-  const { isFetching, isError, data } = useQuery<{ data: Event[] }>({
+  const { isFetching, isError, data } = useQuery<EventApiResponse>({
     queryKey: ["events"],
     queryFn: () => api.get("/admin/events").then((res) => res.data),
   });
 
   const events = data?.data || [];
+  const meta = data?.meta;
 
   return (
     <>
@@ -44,8 +60,15 @@ export default function Events() {
 
         {/* Table */}
         <div className="border border-[#E2E8F0] shadow-[0px_8px_13px_-3px_rgba(0,0,0,0.08)] bg-white">
-          <Table isFetching={isFetching} isError={isError} events={events} />
+          <Table
+            isFetching={isFetching}
+            isError={isError}
+            events={events || []}
+          />
         </div>
+
+        {/* Pagination */}
+        {meta && events.length > 0 ? <Pagination meta={meta} /> : null}
       </div>
     </>
   );

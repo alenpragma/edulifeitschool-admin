@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Event } from "@/types/event";
 import { useEffect } from "react";
+import TextField from "@/components/ui/TextField";
 
 type Props = {
   isOpen: boolean;
@@ -28,7 +29,14 @@ const eventSchema = z.object({
   time: z.string().min(1, "Time is required"),
   location: z.string().min(1, "Location is required"),
   date: z.string().min(1, "Date is required"),
-  icon: z.any().optional(), // optional
+  icon: z.any().optional(),
+  description: z.string().optional(), // optional text
+  entryFee: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^\d+$/.test(val), {
+      message: "Entry fee must be a positive integer",
+    }),
 });
 
 export type UpdateEventInputs = z.infer<typeof eventSchema>;
@@ -69,6 +77,11 @@ export default function UpdateEventModal({
           ? new Date(selectedItem.date).toISOString().split("T")[0]
           : ""
       );
+      setValue("description", selectedItem.description || "");
+      setValue(
+        "entryFee",
+        selectedItem.entryFee !== undefined ? String(selectedItem.entryFee) : ""
+      );
     } else {
       reset();
     }
@@ -108,6 +121,14 @@ export default function UpdateEventModal({
       formData.append("icon", data.icon[0]);
     }
 
+    // description optional, send empty string if not filled
+    formData.append("description", data.description || "");
+
+    // entryFee optional, only append if filled
+    if (data.entryFee) {
+      formData.append("entryFee", data.entryFee);
+    }
+
     updateMutation.mutate(formData);
   };
 
@@ -118,7 +139,7 @@ export default function UpdateEventModal({
       center
       classNames={{
         modal:
-          "rounded-lg !p-0 lg:min-w-[520px] min-w-[320px] overflow-hidden !shadow-none",
+          "rounded-lg !p-0 lg:min-w-[700px] min-w-[320px] overflow-hidden !shadow-none",
       }}
       showCloseIcon={false}
     >
@@ -166,6 +187,22 @@ export default function UpdateEventModal({
               type="file"
               label="Event Icon (Optional)"
               {...register("icon")}
+            />
+
+            <TextField
+              label="Description (Optional)"
+              placeholder="Enter event description"
+              {...register("description")}
+              error={errors.description?.message}
+              rows={5}
+            />
+
+            <Input
+              type="number"
+              label="Entry Fee (Optional)"
+              placeholder="Enter entry fee"
+              {...register("entryFee")}
+              error={errors.entryFee?.message}
             />
           </div>
 

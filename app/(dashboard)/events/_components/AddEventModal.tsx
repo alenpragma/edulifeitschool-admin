@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import TextField from "@/components/ui/TextField";
 
 type Props = {
   isOpen: boolean;
@@ -26,6 +27,13 @@ const addEventSchema = z.object({
   location: z.string().min(1, "Location is required"),
   date: z.string().min(1, "Date is required"),
   icon: z.any().optional(), // optional
+  description: z.string().optional(), // optional text
+  entryFee: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^\d+$/.test(val), {
+      message: "Entry fee must be a positive integer",
+    }),
 });
 
 export type AddEventInputs = z.infer<typeof addEventSchema>;
@@ -75,8 +83,17 @@ export default function AddEventModal({ isOpen, onClose }: Props) {
     formData.append("location", data.location);
     formData.append("date", data.date);
 
+    // optional icon
     if (data.icon && data.icon.length > 0) {
-      formData.append("icon", data.icon[0]); // optional
+      formData.append("icon", data.icon[0]);
+    }
+
+    // optional description, send empty string if not filled
+    formData.append("description", data.description || "");
+
+    // optional entryFee, only append if provided
+    if (data.entryFee) {
+      formData.append("entryFee", data.entryFee);
     }
 
     addMutation.mutate(formData);
@@ -89,7 +106,7 @@ export default function AddEventModal({ isOpen, onClose }: Props) {
       center
       classNames={{
         modal:
-          "rounded-lg !p-0 lg:min-w-[520px] min-w-[320px] overflow-hidden !shadow-none",
+          "rounded-lg !p-0 lg:min-w-[700px] min-w-[320px] overflow-hidden !shadow-none",
       }}
       showCloseIcon={false}
     >
@@ -138,6 +155,22 @@ export default function AddEventModal({ isOpen, onClose }: Props) {
               type="file"
               label="Event Icon (Optional)"
               {...register("icon")}
+            />
+
+            <TextField
+              label="Description (Optional)"
+              placeholder="Enter event description"
+              {...register("description")}
+              error={errors.description?.message}
+              rows={5}
+            />
+
+            <Input
+              type="number"
+              label="Entry Fee (Optional)"
+              placeholder="Enter entry fee"
+              {...register("entryFee")}
+              error={errors.entryFee?.message}
             />
           </div>
 
