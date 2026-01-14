@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
+      {
+        protocol: "https",
+        hostname: "api.edulifeitschool.com",
+        pathname: "/uploads/**",
+      },
     ],
   },
 };
