@@ -103,7 +103,6 @@ export default function SiteSettingsPage() {
               className="object-cover"
               placeholder="blur"
               blurDataURL="/placeholder.png"
-              unoptimized
             />
 
             <button
